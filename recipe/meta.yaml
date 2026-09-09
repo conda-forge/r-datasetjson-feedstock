@@ -1,4 +1,4 @@
-{% set version = '0.3.0' %}
+{% set version = "0.4.0" %}
 {% set posix = 'm2-' if win else '' %}
 
 package:
@@ -9,11 +9,10 @@ source:
   url:
     - {{ cran_mirror }}/src/contrib/datasetjson_{{ version }}.tar.gz
     - {{ cran_mirror }}/src/contrib/Archive/datasetjson/datasetjson_{{ version }}.tar.gz
-  sha256: 7bffc41fe410cbe39cd597f5bac95ed4efea104c7f6bcb74fbeed5f7d992c1bc
+  sha256: c01f720b748cc11dd3188ea23852c518c4dbd20ece4295accefd4b95c067ad7e
 
 build:
-  number: 1
-  noarch: generic
+  number: 0
   rpaths:
     - lib/R/lib/
     - lib/
@@ -24,18 +23,23 @@ build:
 
 requirements:
   build:
+    - {{ compiler('c') }}              # [not win]
+    - {{ stdlib('c') }}                # [not win]
+    - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib('m2w64_c') }}          # [win]
+    - {{ posix }}filesystem        # [win]
+    - {{ posix }}make
+    - {{ posix }}sed               # [win]
+    - {{ posix }}coreutils         # [win]
     - {{ posix }}zip               # [win]
     - cross-r-base {{ r_base }}    # [build_platform != target_platform]
   host:
     - r-base
     - r-hms
-    - r-jsonvalidate >=1.3.1
-    - r-yyjsonr >=0.1.18
+    - zlib
   run:
     - r-base
     - r-hms
-    - r-jsonvalidate >=1.3.1
-    - r-yyjsonr >=0.1.18
 
 test:
   commands:
@@ -45,9 +49,7 @@ test:
 about:
   home: https://atorus-research.github.io/datasetjson/
   license: Apache-2.0
-  summary: Read, construct and write CDISC (Clinical Data Interchange Standards Consortium) Dataset
-    JSON (JavaScript Object Notation) files, while validating per the Dataset JSON schema
-    file, as described in CDISC (2023) <https://www.cdisc.org/standards/data-exchange/dataset-json>.
+  summary: Read, construct and write CDISC (Clinical Data Interchange Standards Consortium) Dataset JSON (JavaScript Object Notation) files, while validating per the Dataset JSON schema file, as described in CDISC (2023) <https://www.cdisc.org/standards/data-exchange/dataset-json>.
   license_family: APACHE
   license_file:
     - LICENSE-2.0.txt
