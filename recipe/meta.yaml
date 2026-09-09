@@ -36,6 +36,7 @@ requirements:
   host:
     - r-base
     - r-hms
+    - zlib
   run:
     - r-base
     - r-hms
